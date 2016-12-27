@@ -4,10 +4,10 @@ defmodule KV.Registry do
   ## Client API
 
   @doc """
-  Starts the registry.
+  Starts the registry with the given `name`.
   """
   def start_link(name) do
-    GenServer.start_link(__MODULE__, name: name)
+    GenServer.start_link(__MODULE__, name, name: name)
   end
 
   @doc """
