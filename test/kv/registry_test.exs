@@ -20,6 +20,9 @@ defmodule KV.RegistryTest do
     KV.Registry.create(registry, "shopping")
     {:ok, bucket} = KV.Registry.lookup(registry, "shopping")
     Agent.stop(bucket)
+
+    # Synchronous call to ensure the registry processed the DOWN message
+    _ = KV.Registry.create(registry, "throwaway")
     assert KV.Registry.lookup(registry, "shopping") == :error
   end
 
@@ -34,6 +37,8 @@ defmodule KV.RegistryTest do
     ref = Process.monitor(bucket)
     assert_receive {:DOWN, ^ref, _, _, _}
 
+    # Synchronous call to ensure the registry processed the DOWN message
+    _ = KV.Registry.create(registry, "throwaway")
     assert KV.Registry.lookup(registry, "shopping") == :error
   end
 end
